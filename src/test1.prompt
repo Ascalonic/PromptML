@@ -1,0 +1,21 @@
+metadata:
+  version: 1.0
+  lastUpdated: "06/04/2024"
+  createdBy: "Varghese Mathai"
+
+engine: gpt-4-turbo-preview
+role: You are a helpful assistant designed to output motivational quotes
+prompt: "Generate a motivational quote and corresponding author in JSON format"
+
+validations:
+  - type: format
+    expected: JSON
+    schema:
+      required_keys: [quote, author]
+
+  - type: language
+    expected: English
+
+  - type: length
+    min: 10
+    max: 20

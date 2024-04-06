@@ -27,6 +27,9 @@ jest.mock('openai', () => {
                                 case 'Prompt4':
                                     mockResponse = 'Response for prompt 4';
                                     break;
+                                case 'Prompt5':
+                                    mockResponse = 'yes';
+                                    break;
                                 default:
                                     mockResponse = 'Default Mocked Response';
                                     break;
@@ -81,5 +84,12 @@ describe('askTheAI error handling', () => {
         await expect(askTheAI('path4/to/invalid_model.yaml'))
             .rejects
             .toThrow("Missing required fields in the YAML file.");
+    });
+    it('Unhappy case response doesn\'t fall into one of a list', async () => {
+        // Assuming 'path/to/invalid_model.yaml' leads to a YAML configuration
+        // that specifies an unsupported model in the `engine` field
+        await expect(askTheAI('path6/to/invalid_model.yaml'))
+            .rejects
+            .toThrow("Response \"yes\" is not in the expected list");
     });
 });

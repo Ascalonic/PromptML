@@ -1,0 +1,17 @@
+metadata:
+  version: 1.0
+  lastUpdated: "06/04/2024"
+  createdBy: "Varghese Mathai"
+
+inputs:
+  - type: scalar
+    name: factToCheck
+
+engine: gpt-4-turbo-preview
+role: You are a helpful assistant designed to validate a fact as correct/incorrect
+prompt: "validate whether {{factToCheck}} is correct or not and return either correct or incorrect"
+
+validations:
+
+  - type: response
+    expected: [ correct, incorrect ]

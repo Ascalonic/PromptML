@@ -51,7 +51,30 @@ const response = await askTheAI(filePath);
 ## Features
 
 -   **Flexible Prompt Configuration**: Define prompts, roles, and more in an easy-to-read YAML format.
--   **Validation Rules**: Ensure outputs meet specified criteria, including format, language, and length validations.
+-   **Validation Rules**: Ensure outputs meet specified criteria, including format, language, length, choices etc.
+    The following will throw if the expected response is not either of "correct" or "incorrect"
+    ```yaml
+    - type: response
+      expected: [ correct, incorrect ]
+      ```
+      The following will throw an error if the expected response isn't in English
+      ```yaml
+      - type: language
+        expected: English
+      ```
+      The following will throw an error if the response length doesn't fall into the specified bounds
+      ```yaml
+        - type: length
+          min: 10
+          max: 100
+      ```
+      The following expects a JSON with keys quote and author mandatorily present in the JSON. You can of course skip the key checks
+      ```yaml
+      - type: format
+        expected: JSON
+        schema:
+          required_keys: [quote, author]
+      ```
 -   **Support for Multiple AI Engines**: Configure the library to use different AI models as needed.
 -   **Pass parameters into the prompt**: Pass inline or external parameters to be injected into the prompts
     ```yaml

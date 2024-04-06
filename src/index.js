@@ -90,6 +90,18 @@ async function askTheAI(filePath, params = null) {
                         throw new Error("The reponse length doesn't fit the criteria");
                     }
                 }
+                else if (validation.type === 'response' && Array.isArray(validation.expected)) {
+                    if(validation.caseSensitive) {
+                        if (!validation.expected.includes(response)) {
+                            throw new Error(`Response "${response}" is not in the expected list`);
+                        }
+                    }
+                    else {
+                        if (!validation.expected.map(x => x.toLowerCase()).includes(response.toLowerCase())) {
+                            throw new Error(`Response "${response}" is not in the expected list`);
+                        }
+                    }
+                }
             }
         }
 

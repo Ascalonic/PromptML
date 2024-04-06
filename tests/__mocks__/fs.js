@@ -57,6 +57,15 @@ engine: gpt-4-turbo-preview
 role: You are a helpful assistant designed to output motivational quotes
 prompt: "{{promptid}}"`;
     }
+    else if (path.includes("path6")) {
+        return `
+engine: gpt-4-turbo-preview
+role: You are a helpful assistant designed to validate a fact as correct or incorrect
+prompt: Prompt5
+validations:
+  - type: response
+    expected: [ correct, incorrect ]`;
+    }
 });
 
 module.exports = fs;

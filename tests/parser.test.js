@@ -24,6 +24,9 @@ jest.mock('openai', () => {
                                 case 'Prompt3':
                                     mockResponse = 'too short';
                                     break;
+                                case 'Prompt4':
+                                    mockResponse = 'Response for prompt 4';
+                                    break;
                                 default:
                                     mockResponse = 'Default Mocked Response';
                                     break;
@@ -48,6 +51,12 @@ describe("askTheAI function", () => {
     it("Happy case YAML is validated, recieved JSON response is validated", async () => {
         const response = await askTheAI('path1/to/valid_input.yaml');
         expect(response).toBeDefined();
+    });
+    it("Happy case: YAML has inputs successfully parsed and response received", async () => {
+        const filePath = 'path5/to/valid_input.yaml';
+        const expectedResponse = 'Response for prompt 4'; 
+        const response = await askTheAI(filePath, { "promptid": "Prompt4" });
+        expect(response).toEqual(expectedResponse);
     });
 });
 

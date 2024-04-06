@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Ascalonic/PromptML#readme",
   "dependencies": {
+    "cld": "^2.9.1",
     "dotenv": "^16.4.5",
     "franc": "^6.2.0",
     "js-yaml": "^4.1.0",

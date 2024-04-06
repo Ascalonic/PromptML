@@ -53,10 +53,23 @@ const response = await askTheAI(filePath);
 -   **Flexible Prompt Configuration**: Define prompts, roles, and more in an easy-to-read YAML format.
 -   **Validation Rules**: Ensure outputs meet specified criteria, including format, language, and length validations.
 -   **Support for Multiple AI Engines**: Configure the library to use different AI models as needed.
+-   **Pass parameters into the prompt**: Pass inline or external parameters to be injected into the prompts
+    ```yaml
+    inputs:
+      - type: scalar
+        name: author
+      - type: scalar
+        name: numberOfQuotes
 
-## Documentation
+    engine: gpt-4-turbo-preview
+    role: You are a helpful assistant designed to output motivational quotes
+    prompt: "Generate {{numberOfQuotes}} motivational quote by {{author}}"
 
-For more detailed documentation, visit the [PromptML npm page](https://www.npmjs.com/package/promptml?activeTab=readme).
+    ```
+    ```javascript
+    const response = await askTheAI(filePath, { "author": "Abraham Lincoln", "numberOfQuotes": 3 });
+    ```
+
 
 ## Contributing
 

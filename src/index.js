@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const cld = require('cld');
 const jsYaml = require('js-yaml');
 const fs = require('fs');
 const OpenAI = require('openai').default;
@@ -9,10 +10,6 @@ const OPEN_AI_MODELS = [
     "gpt-4-turbo-preview"
 ]
 
-const LANGUAGE_CODES = {
-    "eng": "English",
-}
-
 const defaultRole = 'You are a helpful assistant designed to output responses to user queries'
 
 /**
@@ -20,18 +17,35 @@ const defaultRole = 'You are a helpful assistant designed to output responses to
  * @param {string} filePath - The path to the YAML file.
  * @returns {Object} The response from the LLM
  */
-async function askTheAI(filePath) {
+async function askTheAI(filePath, params = null) {
     try {
         // Load YAML file and parse it
         const fileContents = fs.readFileSync(filePath, 'utf8');
 
-        const data = jsYaml.load(fileContents);
-        
+        let data = jsYaml.load(fileContents);
         let format = "any";
 
         // Basic validation example
         if (!data.engine || !data.prompt) {
             throw new Error('Missing required fields in the YAML file.');
+        }
+
+        // Process the inputs
+        let prompt = data.prompt;
+        if (data.inputs) {
+            for (const input of data.inputs) {
+                if (input.type === 'scalar' && input.name) {
+                    const placeholder = `{{${input.name}}}`;
+                    if(input.hasOwnProperty('value')) {
+                        //inline
+                        prompt = prompt.replace(new RegExp(placeholder, 'g'), input.value);
+                    }
+                    else {
+                        prompt = prompt.replace(new RegExp(placeholder, 'g'), params[input.name]);
+                    }
+                    data.prompt = prompt;
+                }
+            }
         }
 
         let response = '';
@@ -66,7 +80,7 @@ async function askTheAI(filePath) {
                 else if (validation.type === "language") {
                     let expectedLanguage = validation.expected;
                     if (format === 'any') {
-                        validateLanguage(response, expectedLanguage);
+                        await validateLanguage(response, expectedLanguage);
                     }
                 }
                 else if (validation.type === "length") {
@@ -87,6 +101,7 @@ async function askTheAI(filePath) {
 }
 
 async function processOpenAIPrompt(role, prompt, model) {
+    console.log("prompt was " + prompt);
     const result = await openai.chat.completions.create({
         messages: [
             {
@@ -129,17 +144,16 @@ function validateJSON(response, requiredKeys) {
     return jsonResponse; // Response is valid JSON and contains all required keys
 }
 
-function validateLanguage(response, language) {
-    import('franc').then(francModule => {
-        const franc = francModule.default;
-        // Use franc as needed
-        const langCode = franc(response);
-        if (!(LANGUAGE_CODES.containsKey(langCode) && LANGUAGE_CODES[langCode] === language)) {
-            throw new Error("Response language is invalid");
+async function validateLanguage(response, language) {
+    try {
+        const result = await cld.detect(response);
+        if(!result.languages.map(lang => lang.name.toLowerCase()).includes(language.toLowerCase())) {
+            throw new Error("Language validation failed");
         }
-    }).catch(error => {
-        console.error('Failed to load franc module:', error);
-    });
+    } catch (error) {
+        console.error('Failed to validate language:', error);
+        throw error; // This allows the error to be caught where validateLanguage is called
+    }
 }
 
 module.exports = askTheAI;

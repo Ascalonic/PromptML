@@ -96,7 +96,7 @@ const response = await askTheAI(filePath);
 
 ## Contributing
 
-We welcome contributions! Please submit an issue or pull request on our [GitHub repository](https://chat.openai.com/c/26f47bb2-087a-4af7-8788-4a9cf4dbd195#) if you'd like to contribute.
+We welcome contributions! Please submit an issue or pull request on our [GitHub repository](https://github.com/Ascalonic/PromptML) if you'd like to contribute.
 
 ## License
 

@@ -78,6 +78,20 @@ const response = await askTheAI(filePath);
         schema:
           required_keys: [quote, author]
       ```
+      The following expects the response to match a regular expression
+      ```yaml
+      - type: regex
+        expected: "[A-Za-z]{10}"
+        strict: true
+      ```
+      And with `strict` false, it will trz to do the damage control and extract whatever it can using the specified regex
+      ```yaml
+      - type: regex
+        expected: "[A-Za-z]{10}"
+        strict: false
+      ```
+      the above code will extract from `Here is a random string : AaUhGGlozQb` the value `AaUhGGlozQb` without throwing any errors!
+
 -   **Support for Multiple AI Engines**: Configure the library to use different AI models as needed.
 -   **Pass parameters into the prompt**: Pass inline or external parameters to be injected into the prompts
     ```yaml

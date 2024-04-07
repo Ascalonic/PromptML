@@ -1,10 +1,10 @@
 const askTheAI = require('./index');
 
 (async () => {
-    const filePath = './samples/factCheck.prompt'; 
+    const filePath = './samples/generateRandomString.prompt'; 
 
     try {
-        const response = await askTheAI(filePath, { "factToCheck": "Cats can lay eggs" });
+        const response = await askTheAI(filePath);
         console.log(response);
     } catch (error) {
         console.error("Failed to process YAML file:", error);

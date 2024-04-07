@@ -66,6 +66,26 @@ validations:
   - type: response
     expected: [ correct, incorrect ]`;
     }
+    else if (path.includes("path7")) {
+        return `
+engine: gpt-4-turbo-preview
+role: You are a helpful assistant designed to return random strings
+prompt: Prompt6
+validations:
+  - type: regex
+    expected: "[A-Z]{6}"
+    strict: false`;
+    }
+    else if (path.includes("path8")) {
+        return `
+engine: gpt-4-turbo-preview
+role: You are a helpful assistant designed to return random strings
+prompt: Prompt6
+validations:
+  - type: regex
+    expected: "[A-Z]{6}"
+    strict: true`;
+    }
 });
 
 module.exports = fs;

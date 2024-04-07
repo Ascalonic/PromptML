@@ -1,0 +1,13 @@
+metadata:
+  version: 1.0
+  lastUpdated: "07/04/2024"
+  createdBy: "Varghese Mathai"
+
+engine: gpt-4
+role: You are a helpful assistant designed to generate a random string
+prompt: "Generate a random string of length 11 containing only upper case alphabets and numbers"
+
+validations:
+  - type: regex
+    expected: "[A-Z0-9]{11}"
+    strict: false

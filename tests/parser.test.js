@@ -30,6 +30,9 @@ jest.mock('openai', () => {
                                 case 'Prompt5':
                                     mockResponse = 'yes';
                                     break;
+                                case 'Prompt6':
+                                    mockResponse = 'random string : AHFDGD';
+                                    break;
                                 default:
                                     mockResponse = 'Default Mocked Response';
                                     break;
@@ -59,6 +62,12 @@ describe("askTheAI function", () => {
         const filePath = 'path5/to/valid_input.yaml';
         const expectedResponse = 'Response for prompt 4'; 
         const response = await askTheAI(filePath, { "promptid": "Prompt4" });
+        expect(response).toEqual(expectedResponse);
+    });
+    it("Happy case: Sucessfully validate and extract some substring from a response using regex in non-strict mode", async () => {
+        const filePath = 'path7/to/valid_input.yaml';
+        const expectedResponse = 'AHFDGD'; 
+        const response = await askTheAI(filePath);
         expect(response).toEqual(expectedResponse);
     });
 });
@@ -91,5 +100,12 @@ describe('askTheAI error handling', () => {
         await expect(askTheAI('path6/to/invalid_model.yaml'))
             .rejects
             .toThrow("Response \"yes\" is not in the expected list");
+    });
+    it('Unhappy case In strict mode, the response doesn\'t fit the regex criteria', async () => {
+        // Assuming 'path/to/invalid_model.yaml' leads to a YAML configuration
+        // that specifies an unsupported model in the `engine` field
+        await expect(askTheAI('path8/to/invalid_model.yaml'))
+            .rejects
+            .toThrow("Output does not match the required regex format: [A-Z]{6}");
     });
 });

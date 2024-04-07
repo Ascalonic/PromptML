@@ -4,7 +4,10 @@
 [![Build Status](https://github.com/Ascalonic/PromptML/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/Ascalonic/PromptML/actions)
 
 
-PromptML is a Node.js library designed to simplify the process of generating and validating AI prompts. It allows users to specify prompt details, validation rules, and other configurations in a YAML file, making AI interactions more structured and easier to manage.
+PromptML is a markup language for storing A.I. prompts, based off YAML. It allows users to specify prompt details, validation rules, 
+and other configurations in a YAML file, making AI interactions more structured and easier to manage.
+
+And this is a Node.js library created to read and process PromptML files. The library acts as a wrapper for interfacing with the LLMs.
 
 ## Installation
 

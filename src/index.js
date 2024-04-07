@@ -7,7 +7,9 @@ const OpenAI = require('openai').default;
 const openai = new OpenAI();
 
 const OPEN_AI_MODELS = [
-    "gpt-4-turbo-preview"
+    "gpt-4-turbo-preview",
+    "gpt-4",
+    "gpt-3.5-turbo"
 ]
 
 const defaultRole = 'You are a helpful assistant designed to output responses to user queries'

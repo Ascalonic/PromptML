@@ -38,7 +38,7 @@ async function askTheAI(filePath, params = null) {
             for (const input of data.inputs) {
                 if (input.type === 'scalar' && input.name) {
                     const placeholder = `{{${input.name}}}`;
-                    if(input.hasOwnProperty('value')) {
+                    if (input.hasOwnProperty('value')) {
                         //inline
                         prompt = prompt.replace(new RegExp(placeholder, 'g'), input.value);
                     }
@@ -93,7 +93,7 @@ async function askTheAI(filePath, params = null) {
                     }
                 }
                 else if (validation.type === 'response' && Array.isArray(validation.expected)) {
-                    if(validation.caseSensitive) {
+                    if (validation.caseSensitive) {
                         if (!validation.expected.includes(response)) {
                             throw new Error(`Response "${response}" is not in the expected list`);
                         }
@@ -101,6 +101,24 @@ async function askTheAI(filePath, params = null) {
                     else {
                         if (!validation.expected.map(x => x.toLowerCase()).includes(response.toLowerCase())) {
                             throw new Error(`Response "${response}" is not in the expected list`);
+                        }
+                    }
+                }
+                else if (validation.type === "regex") {
+                    const regex = new RegExp(validation.expected);
+                    const matches = response.match(regex);
+
+                    if (validation.strict === true) {
+                        if (!matches || matches[0].length < response.length) {
+                            throw new Error(`Output does not match the required regex format: ${validation.expected}`);
+                        }
+                    } else {
+                        if (matches && matches[0]) {
+                            // Extracts the first match if not strict
+                            console.log(`Extracted substring: ${matches[0]}`);
+                            response = matches[0]; 
+                        } else {
+                            console.log("No matching substring found.");
                         }
                     }
                 }
@@ -161,7 +179,7 @@ function validateJSON(response, requiredKeys) {
 async function validateLanguage(response, language) {
     try {
         const result = await cld.detect(response);
-        if(!result.languages.map(lang => lang.name.toLowerCase()).includes(language.toLowerCase())) {
+        if (!result.languages.map(lang => lang.name.toLowerCase()).includes(language.toLowerCase())) {
             throw new Error("Language validation failed");
         }
     } catch (error) {
